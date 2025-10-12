@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Getting Started" id="getting-started">
+    <section-starting-page>
+        <title>Overview</title>
+        <description>Learn about polar realms, a flexible realms solution for player worlds on a multiserver
+            architecture
+        </description>
+        <spotlight>
+            <a href="core-module.md"/>
+            <a href=""/>
+        </spotlight>
+    </section-starting-page>
+</topic>

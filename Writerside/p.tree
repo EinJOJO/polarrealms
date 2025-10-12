@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="p"
+                 name="polarrealms"
+                 start-page="getting-started.topic">
+
+    <toc-element topic="getting-started.topic"/>
+    <toc-element topic="events.md"/>
+    <toc-element topic="core-module.md"/>
+</instance-profile>
