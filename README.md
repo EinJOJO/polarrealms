@@ -1,5 +1,5 @@
 <p align="center" style='text-align: center; margin-top: 2rem'>
-    <img alt="Polar Realms" height="200" src=".idea/icon.svg" width="200"/>
+    <img alt="Polar Realms" height="200" src="./Writerside/images/icon.svg" width="200"/>
 </p>
 <h1 align="center">Polar Realms - WIP 🏝️</h1>
 
