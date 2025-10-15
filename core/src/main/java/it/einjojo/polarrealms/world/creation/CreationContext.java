@@ -35,7 +35,7 @@ public class CreationContext {
     @Nullable
     private final JsonObject customProperties;
 
-    private boolean isRandomName() {
+    public boolean isRandomName() {
         return RANDOM_REALM_NAME.equals(realmName);
     }
 

@@ -20,6 +20,7 @@ public class RealmWorld {
     public final UUID realmId;
     public final UUID ownerId;
     private final List<TrustedPlayer> trustedPlayers = new LinkedList<>();
+    private String name;
     private long lastLoaded;
     private long createdAt;
     private final RealmProperties properties;
@@ -35,8 +36,6 @@ public class RealmWorld {
     public CompletableFuture<Void> visit(OnlinePlayerHandle visitor) {
         return null; //TODO implement visit executor
     }
-
-
 
 
 }

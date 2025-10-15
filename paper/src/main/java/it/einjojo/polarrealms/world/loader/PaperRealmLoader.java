@@ -35,24 +35,36 @@ public class PaperRealmLoader implements RealmLoader {
 
     @Override
     public CompletableFuture<RealmWorld> createRealm(CreationContext context) {
-        return CompletableFuture.supplyAsync(() -> createRealmSync(context));
+        return CompletableFuture.supplyAsync(() -> createRealmSync(context).getRealmWorld());
     }
 
-    private RealmWorld createRealmSync(CreationContext context) {
+    private RealmHandle createRealmSync(CreationContext context) {
         if (realmRepository.existsById(context.getRealmId())) {
             throw new IllegalArgumentException("Realm with id " + context.getRealmId() + " already exists");
         }
-        api.getLogger().info("persisting realm... {}", context);
+        api.getLogger().info("Persisting realm... {}", context);
         Template realmTemplate = context.getTemplate();
         RealmProperties properties = realmTemplate.createProperties(context);
         RealmWorld newRealm = new RealmWorld(context.getRealmId(), context.getOwner(), properties, api);
+        newRealm.setName(context.isRandomName() ?
+                context.getRealmName() + "TODO" :
+                context.getRealmName());
         realmRepository.saveRealm(newRealm);
+        api.getLogger().info("Realm persisted in database.");
         try {
+            api.getLogger().info("Copying template...");
             worldFileStorage.createNewWorldFile(context.getTemplate());
+            api.getLogger().info("Copying template inside storage completed.");
         } catch (IOException e) {
             throw new RuntimeException("Could not copy template", e);
         }
+        return loadRealm(newRealm);
+    }
 
+    private RealmHandle loadRealm(RealmWorld realmWorld) {
+
+        loadedRealms.add(new RealmHandle(realmWorld));
+        return new RealmHandle(realmWorld);
     }
 
     public Optional<RealmHandle> getRealmHandle(UUID realmId) {

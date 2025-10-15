@@ -70,4 +70,6 @@ public interface RealmRepository {
     List<String> loadRealmAliases(UUID realmOwner);
 
     boolean existsById(@NonNull UUID realmId);
+
+    boolean existsByName(UUID realmOwner, String realmName);
 }
