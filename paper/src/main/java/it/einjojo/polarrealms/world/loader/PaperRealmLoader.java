@@ -63,7 +63,7 @@ public class PaperRealmLoader implements RealmLoader {
         api.getLogger().info("Realm persisted in database.");
         try {
             api.getLogger().info("Copying template...");
-            worldFileStorage.createNewWorldFile(context.getTemplate());
+            worldFileStorage.createNewWorldFile(newRealm.getRealmId(), context.getTemplate());
             api.getLogger().info("Copying template inside storage completed.");
         } catch (IOException e) {
             throw new RuntimeException("Could not copy template", e);

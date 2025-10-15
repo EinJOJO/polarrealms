@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public interface WorldFileStorage {
 
-    void createNewWorldFile(Template template) throws IOException;
+    void createNewWorldFile(UUID realmId, Template template) throws IOException;
 
     /**
      * saves the specified polar serialized world data.

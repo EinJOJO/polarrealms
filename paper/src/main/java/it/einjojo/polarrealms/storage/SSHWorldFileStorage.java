@@ -1,8 +1,12 @@
 package it.einjojo.polarrealms.storage;
 
 import it.einjojo.polarrealms.template.Template;
+import net.schmizz.sshj.SSHClient;
+import net.schmizz.sshj.xfer.scp.SCPFileTransfer;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -12,6 +16,7 @@ import java.util.UUID;
 public class SSHWorldFileStorage implements WorldFileStorage {
     private final Path tempFolder;
     private final String remoteWorkingDirectory;
+    private final SSHClient sshClient;
 
     /**
      *
@@ -19,7 +24,8 @@ public class SSHWorldFileStorage implements WorldFileStorage {
      * @param remoteWorkingDirectory the remote working directory.
      * @throws IllegalArgumentException if parameters are invalid
      */
-    public SSHWorldFileStorage(Path tempFolder, String remoteWorkingDirectory) {
+    public SSHWorldFileStorage(Path tempFolder, String remoteWorkingDirectory, SSHClient sshClient) {
+        this.sshClient = sshClient;
         if (remoteWorkingDirectory.trim().isBlank()) {
             throw new IllegalArgumentException("remoteWorkingDirectory cannot be blank");
         }
@@ -28,8 +34,7 @@ public class SSHWorldFileStorage implements WorldFileStorage {
     }
 
 
-    @Override
-    public void createNewWorldFile(Template template) throws IOException {
+    public void createNewWorldFile(UUID realmId, Template template) throws IOException {
 
     }
 
@@ -40,7 +45,13 @@ public class SSHWorldFileStorage implements WorldFileStorage {
 
     @Override
     public byte[] loadWorld(UUID id) throws IOException {
-        return new byte[0];
+        String remotePath = new File(remoteWorkingDirectory, id.toString()).toString();
+        SCPFileTransfer scp = sshClient.newSCPFileTransfer();
+        Path downloadedBinaryFile = tempFolder.resolve(id.toString() + System.currentTimeMillis() + ".polar");
+        scp.download(remotePath, downloadedBinaryFile.toFile().getAbsolutePath());
+        byte[] data = Files.readAllBytes(downloadedBinaryFile);
+        Files.deleteIfExists(downloadedBinaryFile);
+        return data;
     }
 
     @Override
