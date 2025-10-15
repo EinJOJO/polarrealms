@@ -1,4 +1,4 @@
-package it.einjojo.polarrealms.world.creation;
+package it.einjojo.polarrealms.world;
 
 import com.google.gson.JsonObject;
 import it.einjojo.polarrealms.template.Template;

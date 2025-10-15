@@ -1,7 +1,7 @@
 package it.einjojo.polarrealms.template;
 
 import it.einjojo.polarrealms.world.RealmProperties;
-import it.einjojo.polarrealms.world.creation.CreationContext;
+import it.einjojo.polarrealms.world.CreationContext;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;

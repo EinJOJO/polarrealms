@@ -2,7 +2,7 @@ package it.einjojo.polarrealms.command.sub;
 
 import it.einjojo.polarrealms.player.OnlinePlayerHandleFactory;
 import it.einjojo.polarrealms.template.Template;
-import it.einjojo.polarrealms.world.creation.CreationContext;
+import it.einjojo.polarrealms.world.CreationContext;
 import it.einjojo.polarrealms.world.loader.RealmLoader;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;

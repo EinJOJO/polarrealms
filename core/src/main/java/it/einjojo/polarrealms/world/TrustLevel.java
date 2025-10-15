@@ -1,4 +1,4 @@
-package it.einjojo.polarrealms.world.trust;
+package it.einjojo.polarrealms.world;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,13 +1,14 @@
 package it.einjojo.polarrealms.world.loader;
 
 import it.einjojo.polarrealms.PolarRealms;
+import it.einjojo.polarrealms.host.RealmHost;
 import it.einjojo.polarrealms.repository.RealmRepository;
 import it.einjojo.polarrealms.storage.WorldFileStorage;
 import it.einjojo.polarrealms.template.Template;
+import it.einjojo.polarrealms.world.CreationContext;
 import it.einjojo.polarrealms.world.RealmHandle;
 import it.einjojo.polarrealms.world.RealmProperties;
 import it.einjojo.polarrealms.world.RealmWorld;
-import it.einjojo.polarrealms.world.creation.CreationContext;
 import live.minehub.polarpaper.Polar;
 import live.minehub.polarpaper.PolarReader;
 import live.minehub.polarpaper.PolarWorld;
@@ -26,17 +27,20 @@ import java.util.concurrent.CompletableFuture;
  */
 @NullMarked
 public class PaperRealmLoader implements RealmLoader {
+
     private final List<RealmHandle> loadedRealms = new LinkedList<>();
     private final PolarRealms api;
     private final RealmRepository realmRepository;
     private final WorldFileStorage worldFileStorage;
+    private final RealmHost host;
 
     public PolarConfigFactory polarConfigFactory = PolarConfigFactory.DEFAULT;
 
-    public PaperRealmLoader(PolarRealms api, RealmRepository realmRepository, WorldFileStorage worldFileStorage) {
+    public PaperRealmLoader(PolarRealms api, RealmRepository realmRepository, WorldFileStorage worldFileStorage, RealmHost host) {
         this.api = api;
         this.realmRepository = realmRepository;
         this.worldFileStorage = worldFileStorage;
+        this.host = host;
     }
 
     @Override
@@ -72,6 +76,9 @@ public class PaperRealmLoader implements RealmLoader {
     }
 
     private RealmHandle loadRealm(RealmWorld realmWorld) throws IOException {
+        api.getLogger().info("Loading realm...");
+        getStateManager().claimLock(realmWorld.getRealmId(), host);
+        api.getLogger().info("Claimed lock.");
         byte[] polarWorldBytes = worldFileStorage.loadWorld(realmWorld.getRealmId());
         PolarWorld polarWorld = PolarReader.read(polarWorldBytes);
         Polar.loadWorld(polarWorld, realmWorld.getRealmId().toString(), polarConfigFactory.createConfig(realmWorld));
@@ -88,6 +95,14 @@ public class PaperRealmLoader implements RealmLoader {
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     *
+     * @return a unique string to identify the lock file
+     */
+    public String getLockName() {
+        return "polarrealms-lock";
     }
 
     @Override

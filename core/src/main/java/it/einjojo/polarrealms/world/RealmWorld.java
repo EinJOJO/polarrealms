@@ -34,7 +34,7 @@ public class RealmWorld {
      */
     @CanIgnoreReturnValue
     public CompletableFuture<Void> visit(OnlinePlayerHandle visitor) {
-        return null; //TODO implement visit executor
+        return api.getVisitExecutor().visit(this, visitor);
     }
 
 

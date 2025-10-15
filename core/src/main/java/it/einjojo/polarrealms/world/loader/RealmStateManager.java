@@ -1,10 +1,25 @@
 package it.einjojo.polarrealms.world.loader;
 
+import io.lettuce.core.SetArgs;
+import io.lettuce.core.api.StatefulRedisConnection;
+import it.einjojo.polarrealms.exception.LockViolationException;
+import it.einjojo.polarrealms.host.RealmHost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.UUID;
+
 /**
  * Manages loaded realms using Redis
  */
 public class RealmStateManager {
+    private static final int LOCK_TTL = 604800; // 7 days
+    private static final String LOCKS = "pr:locks:";
+    private final StatefulRedisConnection<String, String> redis;
 
+    public RealmStateManager(StatefulRedisConnection<String, String> redis) {
+        this.redis = redis;
+    }
 
     /**
      * Only called by PaperRealmLoader
@@ -12,5 +27,42 @@ public class RealmStateManager {
     protected void setState() {
 
     }
+
+    /**
+     * Claims a lock using redis atomic operations.
+     *
+     * @param realmId    the ID of the realm to lock
+     * @param lockHolder the host that is claiming the lock
+     * @throws LockViolationException if the lock is already claimed by another host
+     */
+    protected void claimLock(UUID realmId, RealmHost lockHolder) throws LockViolationException {
+        if (!"OK".equals(redis.sync().set(LOCKS + realmId, lockHolder.getInternalName(), new SetArgs().nx().ex(LOCK_TTL)))) {
+            throw new LockViolationException(realmId, lockHolder, redis.sync().get(LOCKS + realmId));
+        }
+    }
+
+    /**
+     * Releases a lock using redis atomic operations.
+     *
+     * @param realmId    id
+     * @param lockHolder host that is releasing the lock
+     * @throws LockViolationException if the lock is held by another host
+     */
+    protected void releaseLock(UUID realmId, RealmHost lockHolder) throws LockViolationException {
+        String lockOwner = redis.sync().get(LOCKS + realmId);
+        if (lockOwner == null) {
+            getLogger().warn("Lock for realm {} is not claimed but was released.", realmId);
+            return;
+        }
+        if (!lockOwner.equals(lockHolder.getInternalName())) {
+            throw new LockViolationException(realmId, lockHolder, lockOwner);
+        }
+        redis.sync().del(LOCKS + realmId);
+    }
+
+    public Logger getLogger() {
+        return LoggerFactory.getLogger(getClass());
+    }
+
 
 }

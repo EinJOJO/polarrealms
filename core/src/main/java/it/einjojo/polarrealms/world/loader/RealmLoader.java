@@ -1,7 +1,7 @@
 package it.einjojo.polarrealms.world.loader;
 
 import it.einjojo.polarrealms.world.RealmWorld;
-import it.einjojo.polarrealms.world.creation.CreationContext;
+import it.einjojo.polarrealms.world.CreationContext;
 
 import java.util.concurrent.CompletableFuture;
 
