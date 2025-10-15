@@ -4,7 +4,8 @@ import it.einjojo.polarrealms.command.CommandManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class PaperPolarRealms extends JavaPlugin  {
+public class PaperPolarRealms extends JavaPlugin {
+
 
     @Getter
     private static PaperPolarRealms instance;
