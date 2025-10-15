@@ -26,6 +26,7 @@ public class CreationContext {
     private final Template template;
 
     @Builder.Default
+    @NonNull
     private final String realmName = RANDOM_REALM_NAME;
 
     /**
@@ -34,4 +35,18 @@ public class CreationContext {
     @Nullable
     private final JsonObject customProperties;
 
+    private boolean isRandomName() {
+        return RANDOM_REALM_NAME.equals(realmName);
+    }
+
+    @Override
+    public String toString() {
+        return "CreationContext{" +
+                "realmId=" + realmId +
+                ", owner=" + owner +
+                ", template=" + template +
+                ", realmName='" + realmName + '\'' +
+                ", customProperties=" + customProperties +
+                '}';
+    }
 }

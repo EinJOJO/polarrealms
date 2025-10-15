@@ -5,4 +5,12 @@ package it.einjojo.polarrealms.world.loader;
  */
 public class RealmStateManager {
 
+
+    /**
+     * Only called by PaperRealmLoader
+     */
+    protected void setState() {
+
+    }
+
 }

@@ -41,6 +41,8 @@ dependencies {
     paperLibrary("org.incendo:cloud-annotations:2.0.0")
     annotationProcessor("org.incendo:cloud-annotations:2.0.0")
     paperLibrary("org.incendo:cloud-paper:2.0.0-beta.10")
+
+    paperLibrary("com.hierynomus:sshj:0.38.0")
 }
 
 

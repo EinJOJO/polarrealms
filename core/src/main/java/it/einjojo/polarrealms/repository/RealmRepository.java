@@ -2,8 +2,12 @@ package it.einjojo.polarrealms.repository;
 
 
 import it.einjojo.polarrealms.world.RealmWorld;
+import org.jspecify.annotations.NonNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -65,4 +69,5 @@ public interface RealmRepository {
      */
     List<String> loadRealmAliases(UUID realmOwner);
 
+    boolean existsById(@NonNull UUID realmId);
 }
