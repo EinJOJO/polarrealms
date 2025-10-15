@@ -8,6 +8,9 @@ import it.einjojo.polarrealms.world.RealmHandle;
 import it.einjojo.polarrealms.world.RealmProperties;
 import it.einjojo.polarrealms.world.RealmWorld;
 import it.einjojo.polarrealms.world.creation.CreationContext;
+import live.minehub.polarpaper.Polar;
+import live.minehub.polarpaper.PolarReader;
+import live.minehub.polarpaper.PolarWorld;
 import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
@@ -19,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * A paper realm loader holds all {@link RealmHandle} instances which are loaded by the plugin.
+ * Creates realms
  */
 @NullMarked
 public class PaperRealmLoader implements RealmLoader {
@@ -26,6 +30,8 @@ public class PaperRealmLoader implements RealmLoader {
     private final PolarRealms api;
     private final RealmRepository realmRepository;
     private final WorldFileStorage worldFileStorage;
+
+    public PolarConfigFactory polarConfigFactory = PolarConfigFactory.DEFAULT;
 
     public PaperRealmLoader(PolarRealms api, RealmRepository realmRepository, WorldFileStorage worldFileStorage) {
         this.api = api;
@@ -58,13 +64,21 @@ public class PaperRealmLoader implements RealmLoader {
         } catch (IOException e) {
             throw new RuntimeException("Could not copy template", e);
         }
-        return loadRealm(newRealm);
+        try {
+            return loadRealm(newRealm);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private RealmHandle loadRealm(RealmWorld realmWorld) {
+    private RealmHandle loadRealm(RealmWorld realmWorld) throws IOException {
+        byte[] polarWorldBytes = worldFileStorage.loadWorld(realmWorld.getRealmId());
+        PolarWorld polarWorld = PolarReader.read(polarWorldBytes);
+        Polar.loadWorld(polarWorld, realmWorld.getRealmId().toString(), polarConfigFactory.createConfig(realmWorld));
+        RealmHandle handle = new RealmHandle(realmWorld, polarWorld, this);
+        loadedRealms.add(handle);
+        return handle;
 
-        loadedRealms.add(new RealmHandle(realmWorld));
-        return new RealmHandle(realmWorld);
     }
 
     public Optional<RealmHandle> getRealmHandle(UUID realmId) {
