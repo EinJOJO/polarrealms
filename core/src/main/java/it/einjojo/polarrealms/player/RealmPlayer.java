@@ -12,6 +12,11 @@ public class RealmPlayer {
     private final UUID uuid;
     private final NameProvider nameProvider;
 
+    public RealmPlayer(UUID uuid, NameProvider nameProvider) {
+        this.uuid = uuid;
+        this.nameProvider = nameProvider;
+    }
+
     public String getName() {
         return nameProvider.getUsername(uuid);
     }

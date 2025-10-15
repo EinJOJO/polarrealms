@@ -1,7 +1,17 @@
 package it.einjojo.polarrealms;
 
-public class PaperPolarRealms implements PolarRealms {
+import it.einjojo.polarrealms.command.CommandManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
+public class PaperPolarRealms extends JavaPlugin implements PolarRealms {
 
+    @Override
+    public void onEnable() {
+        new CommandManager(this).registerCommands();
+    }
 
+    @Override
+    public void onDisable() {
+
+    }
 }

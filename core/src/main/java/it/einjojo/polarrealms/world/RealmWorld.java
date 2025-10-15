@@ -1,5 +1,6 @@
 package it.einjojo.polarrealms.world;
 
+import it.einjojo.polarrealms.PolarRealms;
 import it.einjojo.polarrealms.player.OnlinePlayerHandle;
 import it.einjojo.polarrealms.player.TrustedPlayer;
 import lombok.Getter;
@@ -19,6 +20,13 @@ public class RealmWorld {
     private final List<TrustedPlayer> trustedPlayers = new LinkedList<>();
     private long lastLoaded;
     private long createdAt;
+    private final PolarRealms api;
+
+    public RealmWorld(UUID realmId, UUID ownerId, PolarRealms api) {
+        this.realmId = realmId;
+        this.ownerId = ownerId;
+        this.api = api;
+    }
 
     /**
      *

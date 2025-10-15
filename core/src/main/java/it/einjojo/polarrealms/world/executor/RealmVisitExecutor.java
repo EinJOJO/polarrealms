@@ -1,5 +1,7 @@
 package it.einjojo.polarrealms.world.executor;
 
+import it.einjojo.polarrealms.world.loader.RealmLoader;
+
 /**
  * Visiting a realm is quite complex.
  * Depending on the server environment, the logic might be different. I'd like to keep the possibility to extend it.
