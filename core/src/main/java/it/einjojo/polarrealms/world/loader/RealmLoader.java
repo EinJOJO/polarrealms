@@ -1,6 +1,7 @@
 package it.einjojo.polarrealms.world.loader;
 
 import it.einjojo.polarrealms.world.RealmWorld;
+import it.einjojo.polarrealms.world.creation.CreationContext;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -14,7 +15,12 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface RealmLoader {
 
-    CompletableFuture<RealmWorld> createRealm();
+    /**
+     * Creates a new realm world.
+     *
+     * @return a CompletableFuture containing the created realm world
+     */
+    CompletableFuture<RealmWorld> createRealm(CreationContext context);
 
     RealmStateManager getStateManager();
 

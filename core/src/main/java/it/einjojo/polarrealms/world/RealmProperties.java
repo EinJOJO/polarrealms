@@ -1,10 +1,7 @@
 package it.einjojo.polarrealms.world;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import lombok.Getter;
 
 import java.util.Map;
@@ -12,11 +9,24 @@ import java.util.Set;
 
 @Getter
 public class RealmProperties {
-
     private final JsonObject internal;
+    private final Gson gson;
 
-    public RealmProperties(JsonObject internal) {
+    public RealmProperties(Gson gson) {
+        this(new JsonObject(), gson);
+    }
+
+    public RealmProperties(JsonObject internal, Gson gson) {
         this.internal = internal;
+        this.gson = gson;
+    }
+
+    public Location getSpawnLocation() {
+        return gson.fromJson(internal.get("spawn"), Location.class);
+    }
+
+    public void setSpawnLocation(Location location) {
+        internal.add("spawn", gson.toJsonTree(location));
     }
 
     public JsonElement get(String memberName) {

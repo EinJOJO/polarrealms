@@ -1,13 +1,18 @@
 package it.einjojo.polarrealms;
 
 import it.einjojo.polarrealms.command.CommandManager;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class PaperPolarRealms extends JavaPlugin implements PolarRealms {
+public class PaperPolarRealms extends JavaPlugin  {
+
+    @Getter
+    private static PaperPolarRealms instance;
 
     @Override
     public void onEnable() {
-        new CommandManager(this).registerCommands();
+        instance = this;
+        new CommandManager(this);
     }
 
     @Override

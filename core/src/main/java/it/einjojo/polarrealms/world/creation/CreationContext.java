@@ -12,6 +12,9 @@ import java.util.UUID;
 @Data
 @Builder
 public class CreationContext {
+
+    public static String RANDOM_REALM_NAME = "__RANDOM__";
+
     @Builder.Default
     @NonNull
     private final UUID realmId = UUID.randomUUID();
@@ -21,6 +24,9 @@ public class CreationContext {
 
     @NonNull
     private final Template template;
+
+    @Builder.Default
+    private final String realmName = RANDOM_REALM_NAME;
 
     /**
      * Merged with the template properties.

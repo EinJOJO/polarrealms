@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class Template {
     private final String name;
+    private String permission;
     private final RealmProperties defaultProperties;
 
     /**

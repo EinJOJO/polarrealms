@@ -21,19 +21,28 @@ import org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper;
 import org.incendo.cloud.paper.util.sender.Source;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * <ul>
+ * <li>Uses the incendo cloud command framework to register annotated classes as commands.</li>
+ * <li>Handles exceptions that are thrown during command execution.</li>
+ * </ul>
+ */
 @NullMarked
 public class CommandManager {
     private final PaperPolarRealms plugin;
     private final PaperCommandManager<Source> commandManager;
 
+    /**
+     * Registers commands
+     *
+     * @param plugin the plugin instance
+     */
     public CommandManager(PaperPolarRealms plugin) {
         this.plugin = plugin;
         commandManager = PaperCommandManager.builder(PaperSimpleSenderMapper.simpleSenderMapper()).executionCoordinator(ExecutionCoordinator.coordinatorFor(ExecutionCoordinator.nonSchedulingExecutor())).buildOnEnable(plugin);
         commandManager.brigadierManager().settings().set(BrigadierSetting.FORCE_EXECUTABLE, true);
-
         registerExceptionControllers(commandManager);
-
-
+        registerCommands();
     }
 
     private void registerExceptionControllers(PaperCommandManager<Source> commandManager) {
@@ -56,7 +65,11 @@ public class CommandManager {
                 });
     }
 
-    public void registerCommands() {
+    private CommandSender extractSender(CommandContext<Source> source) {
+        return source.get(BukkitCommandContextKeys.BUKKIT_COMMAND_SENDER);
+    }
+
+    private void registerCommands() {
         AnnotationParser<Source> parser = new AnnotationParser<>(commandManager, Source.class);
         try {
             var registeredCommanadsCollection = parser.parseContainers(plugin.getClass().getClassLoader());
@@ -66,10 +79,6 @@ public class CommandManager {
         } catch (Exception e) {
             plugin.getSLF4JLogger().error("Could not register commands", e);
         }
-    }
-
-    private CommandSender extractSender(CommandContext<Source> source) {
-        return source.get(BukkitCommandContextKeys.BUKKIT_COMMAND_SENDER);
     }
 
 }
