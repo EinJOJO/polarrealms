@@ -2,9 +2,11 @@ package it.einjojo.polarrealms;
 
 import it.einjojo.polarrealms.command.CommandManager;
 import lombok.Getter;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PaperPolarRealms extends JavaPlugin {
+    private MiniMessage miniMessage;
 
 
     @Getter
@@ -19,5 +21,9 @@ public class PaperPolarRealms extends JavaPlugin {
     @Override
     public void onDisable() {
 
+    }
+
+    public static MiniMessage miniMessage() {
+        return instance.miniMessage;
     }
 }
