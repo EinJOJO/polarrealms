@@ -15,6 +15,7 @@ public class PaperPolarRealms extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
         new CommandManager(this);
     }
 
