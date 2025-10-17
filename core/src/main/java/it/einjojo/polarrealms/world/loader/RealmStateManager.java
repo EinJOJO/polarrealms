@@ -4,9 +4,11 @@ import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
 import it.einjojo.polarrealms.exception.LockViolationException;
 import it.einjojo.polarrealms.host.RealmHost;
+import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -58,6 +60,10 @@ public class RealmStateManager {
             throw new LockViolationException(realmId, lockHolder, lockOwner);
         }
         redis.sync().del(LOCKS + realmId);
+    }
+
+    public Optional<ActiveRealmSnapshot> getActiveRealmSnapshot(UUID realmId) {
+        return Optional.empty();
     }
 
     public Logger getLogger() {

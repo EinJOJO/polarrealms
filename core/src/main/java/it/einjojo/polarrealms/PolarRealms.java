@@ -1,5 +1,7 @@
 package it.einjojo.polarrealms;
 
+import it.einjojo.polarrealms.event.LettuceNetworkEventBus;
+import it.einjojo.polarrealms.host.RealmHost;
 import it.einjojo.polarrealms.player.OnlinePlayerHandleFactory;
 import it.einjojo.polarrealms.player.RealmPlayer;
 import it.einjojo.polarrealms.world.executor.RealmVisitExecutor;
@@ -21,5 +23,9 @@ public interface PolarRealms {
     RealmStateManager getRealmStateManager();
 
     Logger getLogger();
+
+    Optional<RealmHost> getHostInformation();
+
+    LettuceNetworkEventBus getEventBus();
 
 }

@@ -2,12 +2,14 @@ package it.einjojo.polarrealms.event;
 
 
 import com.google.common.eventbus.EventBus;
+import lombok.Getter;
 
 /**
  * Dispatches events to all servers in the network.
  *
  */
 public abstract class NetworkEventBus {
+    @Getter
     protected final EventBus eventBus = new EventBus("networkBusInternal");
 
     public abstract void post(Object event);
@@ -38,4 +40,7 @@ public abstract class NetworkEventBus {
     }
 
 
+    public EventBus getInternalEventBus() {
+        return eventBus;
+    }
 }
