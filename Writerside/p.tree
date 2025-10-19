@@ -6,9 +6,11 @@
                  name="polarrealms"
                  start-page="getting-started.topic">
 
-    <toc-element topic="online-player-handle.md"/>
-    <toc-element topic="lifecycle.md"/>
     <toc-element topic="getting-started.topic"/>
-    <toc-element topic="events.md"/>
-    <toc-element topic="core-module.md"/>
+    <toc-element toc-title="Developers">
+        <toc-element topic="core-module.md"/>
+        <toc-element topic="lifecycle.md"/>
+        <toc-element topic="events.md"/>
+        <toc-element topic="online-player-handle.md"/>
+    </toc-element>
 </instance-profile>

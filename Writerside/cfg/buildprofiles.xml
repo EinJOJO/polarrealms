@@ -6,9 +6,14 @@
 
     <build-profile instance="p">
         <variables>
+            <custom-css>custom.css</custom-css>
             <noindex-content>true</noindex-content>
             <enable-contribution>true</enable-contribution>
             <contribute-url>https://einjojo.it</contribute-url>
+            <header-logo>icon.svg</header-logo>
+            <custom-favicons>icon.svg</custom-favicons>
+            <primary-color>frozen</primary-color>
+            <color-preset>soft</color-preset>
         </variables>
     </build-profile>
 
