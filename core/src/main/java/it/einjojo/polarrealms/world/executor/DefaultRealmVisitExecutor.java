@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Default implementation of {@link RealmVisitExecutor}.
+ * //TODO write docs
  *
  */
 @Getter
@@ -40,22 +41,19 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
     @Override
     public CompletableFuture<Void> visit(RealmWorld realmWorld, OnlinePlayerHandle visitor) {
         return loader.withLoadedRealm().thenCompose((activeRealm) -> {
-            if (api.getHostInformation().isEmpty()) { // Not a host system => a player always needs to be teleported.
+            if (api.getHostInformation().isEmpty()) { // Executor is not running on a host system => a player is always on the wrong server.
                 return announceAndConnectVisitorToHostSystem(activeRealm, visitor);
-            } else if (activeRealm.getHostServerName().equals(api.getHostInformation().get().getInternalName())) { // realm is hosted on this system
+            } else if (activeRealm.getHostServerName().equals(api.getHostInformation().get().getInternalName())) { // check realm is hosted on this system
                 return visitor.getServerName().thenCompose(serverName -> {
                     if (serverName.equals(activeRealm.getHostServerName())) {
                         visitor.teleport(realmWorld.getProperties().getSpawnLocation()); // player is already connected to this host system and just has to be teleported.
-                        return createCompletableOfPlayerIsConnectedOrTimeout(visitor.getUniqueId(), realmWorld); // return a future that will be completed when the player is connected to this host system
+                        return createCompletableOfPlayerIsConnectedOrTimeout(visitor.uniqueId(), realmWorld); // return a future that will be completed when the player is connected to this host system
                     }
                     return announceAndConnectVisitorToHostSystem(activeRealm, visitor); // player is connected to this host system
                 });
+            } else { // realm is hosted elsewhere.
+                return announceAndConnectVisitorToHostSystem(activeRealm, visitor);
             }
-            // realm is hosted elsewhere.
-            return announceAndConnectVisitorToHostSystem(activeRealm, visitor);
-        }).exceptionally((ex) -> {
-            api.getLogger().error("Error executing realm visit.", ex);
-            return null;
         });
     }
 
@@ -68,9 +66,9 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
      * @return a future that completes when the visitor has been successfully connected to the realm.
      */
     protected CompletableFuture<Void> announceAndConnectVisitorToHostSystem(ActiveRealmSnapshot activeRealm, OnlinePlayerHandle visitor) {
-        return visitAnnouncer.announce(visitor.getUniqueId(), activeRealm.getRealmId())
+        return visitAnnouncer.announce(visitor.uniqueId(), activeRealm.getRealmId())
                 .thenCompose((_void) -> visitor.connect(activeRealm.getHostServerName()))
-                .thenCompose((_void) -> createCompletableOfPlayerIsConnectedOrTimeout(visitor.getUniqueId(), activeRealm.getRealm()));
+                .thenCompose((_void) -> createCompletableOfPlayerIsConnectedOrTimeout(visitor.uniqueId(), activeRealm.getRealm()));
     }
 
     /**

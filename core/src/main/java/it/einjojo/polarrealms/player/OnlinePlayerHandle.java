@@ -1,6 +1,7 @@
 package it.einjojo.polarrealms.player;
 
 import it.einjojo.polarrealms.world.Location;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -24,7 +25,12 @@ public interface OnlinePlayerHandle {
      */
     void connectSilently(String velocityServerName);
 
-    CompletableFuture<String> getServerName();
+    /**
+     * Get Server Name of player
+     *
+     * @return server name if connected to a server, empty otherwise
+     */
+    CompletableFuture<@Nullable String> getServerName();
 
     /**
      *
