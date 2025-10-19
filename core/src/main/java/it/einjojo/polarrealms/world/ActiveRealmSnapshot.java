@@ -19,4 +19,7 @@ public class ActiveRealmSnapshot {
     private final String hostServerName;
 
 
+    public UUID getRealmId() {
+        return realm.getRealmId();
+    }
 }
