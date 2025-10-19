@@ -75,18 +75,21 @@ public class PaperRealmLoader implements RealmLoader {
     private RealmHandle loadRealm(RealmWorld realmWorld) throws IOException {
         api.getLogger().info("Loading realm...");
         getStateManager().claimLock(realmWorld.getRealmId(), host);
-        api.getLogger().info("Claimed lock.");
+        api.getLogger().info("1/4 Claimed lock.");
         byte[] polarWorldBytes = worldFileStorage.loadWorld(realmWorld.getRealmId());
+        api.getLogger().info("2/4 Loaded from storage. ({} bytes)", polarWorldBytes.length);
         PolarWorld polarWorld = PolarReader.read(polarWorldBytes);
         Polar.loadWorld(polarWorld, realmWorld.getRealmId().toString(), polarConfigFactory.createConfig(realmWorld));
+        api.getLogger().info("3/4 Loaded by Polar.");
         RealmHandle handle = new RealmHandle(realmWorld, polarWorld, this);
-        loadedRealms.add(handle); //TODO verify
+        loadedRealms.add(handle);
+        api.getLogger().info("4/4 Created Handle instance. Realm loaded successfully. ({} realms loaded.)", loadedRealms.size());
         return handle;
     }
 
     @Override
     public CompletableFuture<ActiveRealmSnapshot> withLoadedRealm() {
-        return null;
+        return null; //TODO Create instances of active snapshots
     }
 
     public Optional<RealmHandle> getRealmHandle(UUID realmId) {
@@ -98,13 +101,6 @@ public class PaperRealmLoader implements RealmLoader {
         return Optional.empty();
     }
 
-    /**
-     *
-     * @return a unique string to identify the lock file
-     */
-    public String getLockName() {
-        return "polarrealms-lock";
-    }
 
     @Override
     public RealmStateManager getStateManager() {

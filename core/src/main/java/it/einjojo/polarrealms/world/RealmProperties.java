@@ -12,6 +12,11 @@ public class RealmProperties {
     private final JsonObject internal;
     private final Gson gson;
 
+    public RealmProperties(String jsonString, Gson gson) {
+        this.gson = gson;
+        this.internal = gson.fromJson(jsonString, JsonObject.class);
+    }
+
     public RealmProperties(Gson gson) {
         this(new JsonObject(), gson);
     }
@@ -92,6 +97,10 @@ public class RealmProperties {
 
     public Map<String, JsonElement> asMap() {
         return internal.asMap();
+    }
+
+    public String toJsonString() {
+        return gson.toJson(internal);
     }
 
     @Override

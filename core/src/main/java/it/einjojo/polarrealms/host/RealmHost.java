@@ -1,7 +1,7 @@
 package it.einjojo.polarrealms.host;
 
 /**
- * Implemented by a singleton instance on the host system to identify it.
+ * Implemented on the host system to identify it.
  */
 
 public interface RealmHost {

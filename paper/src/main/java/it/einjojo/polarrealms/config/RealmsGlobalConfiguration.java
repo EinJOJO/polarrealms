@@ -18,9 +18,6 @@ public class RealmsGlobalConfiguration {
 
 
     public static RealmsGlobalConfiguration load(Path jsonConfigFile) throws IOException {
-        if (!jsonConfigFile.endsWith(".json")) {
-            throw new IllegalArgumentException("The file must be a .json file");
-        }
         if (!jsonConfigFile.toFile().exists()) {
             Files.createFile(jsonConfigFile);
             return new RealmsGlobalConfiguration().save(jsonConfigFile);

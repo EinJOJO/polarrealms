@@ -47,7 +47,7 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
                 return visitor.getServerName().thenCompose(serverName -> {
                     if (serverName.equals(activeRealm.getHostServerName())) {
                         visitor.teleport(realmWorld.getProperties().getSpawnLocation()); // player is already connected to this host system and just has to be teleported.
-                        return createCompletableOfPlayerIsConnectedOrTimeout(visitor.uniqueId(), realmWorld); // return a future that will be completed when the player is connected to this host system
+                        return createCompletableOfPlayerIsConnectedOrTimeout(visitor.getUniqueId(), realmWorld); // return a future that will be completed when the player is connected to this host system
                     }
                     return announceAndConnectVisitorToHostSystem(activeRealm, visitor); // player is connected to this host system
                 });
@@ -66,9 +66,9 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
      * @return a future that completes when the visitor has been successfully connected to the realm.
      */
     protected CompletableFuture<Void> announceAndConnectVisitorToHostSystem(ActiveRealmSnapshot activeRealm, OnlinePlayerHandle visitor) {
-        return visitAnnouncer.announce(visitor.uniqueId(), activeRealm.getRealmId())
+        return visitAnnouncer.announce(visitor.getUniqueId(), activeRealm.getRealmId())
                 .thenCompose((_void) -> visitor.connect(activeRealm.getHostServerName()))
-                .thenCompose((_void) -> createCompletableOfPlayerIsConnectedOrTimeout(visitor.uniqueId(), activeRealm.getRealm()));
+                .thenCompose((_void) -> createCompletableOfPlayerIsConnectedOrTimeout(visitor.getUniqueId(), activeRealm.getRealm()));
     }
 
     /**

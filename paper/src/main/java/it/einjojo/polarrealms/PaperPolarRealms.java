@@ -7,6 +7,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class PaperPolarRealms extends JavaPlugin {
     private MiniMessage miniMessage;
@@ -17,7 +18,9 @@ public class PaperPolarRealms extends JavaPlugin {
 
     @Override
     public void onLoad() {
+
         try {
+            Files.createDirectory(getDataPath());
             config = RealmsGlobalConfiguration.load(getDataPath().resolve("config.json"));
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration", e);
