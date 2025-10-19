@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class PaperPolarRealms extends JavaPlugin {
-    private MiniMessage miniMessage;
+    private MiniMessage miniMessage = MiniMessage.miniMessage();
     private RealmsGlobalConfiguration config;
     @Getter
     private TemplateRepository templateRepository;
@@ -28,7 +28,6 @@ public class PaperPolarRealms extends JavaPlugin {
 
     @Override
     public void onLoad() {
-
         try {
             if (Files.notExists(getDataPath())) {
                 Files.createDirectory(getDataPath());
