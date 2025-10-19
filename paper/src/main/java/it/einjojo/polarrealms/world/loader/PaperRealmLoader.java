@@ -5,10 +5,7 @@ import it.einjojo.polarrealms.host.RealmHost;
 import it.einjojo.polarrealms.repository.RealmRepository;
 import it.einjojo.polarrealms.storage.WorldFileStorage;
 import it.einjojo.polarrealms.template.Template;
-import it.einjojo.polarrealms.world.CreationContext;
-import it.einjojo.polarrealms.world.RealmHandle;
-import it.einjojo.polarrealms.world.RealmProperties;
-import it.einjojo.polarrealms.world.RealmWorld;
+import it.einjojo.polarrealms.world.*;
 import live.minehub.polarpaper.Polar;
 import live.minehub.polarpaper.PolarReader;
 import live.minehub.polarpaper.PolarWorld;
@@ -83,9 +80,13 @@ public class PaperRealmLoader implements RealmLoader {
         PolarWorld polarWorld = PolarReader.read(polarWorldBytes);
         Polar.loadWorld(polarWorld, realmWorld.getRealmId().toString(), polarConfigFactory.createConfig(realmWorld));
         RealmHandle handle = new RealmHandle(realmWorld, polarWorld, this);
-        loadedRealms.add(handle);
+        loadedRealms.add(handle); //TODO verify
         return handle;
+    }
 
+    @Override
+    public CompletableFuture<ActiveRealmSnapshot> withLoadedRealm() {
+        return null;
     }
 
     public Optional<RealmHandle> getRealmHandle(UUID realmId) {

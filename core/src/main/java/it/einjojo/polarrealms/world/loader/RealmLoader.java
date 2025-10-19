@@ -1,7 +1,8 @@
 package it.einjojo.polarrealms.world.loader;
 
-import it.einjojo.polarrealms.world.RealmWorld;
+import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import it.einjojo.polarrealms.world.CreationContext;
+import it.einjojo.polarrealms.world.RealmWorld;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,4 +25,10 @@ public interface RealmLoader {
 
     RealmStateManager getStateManager();
 
+    /**
+     * Loads the realm asynchronously or returns an existing loaded realm.
+     *
+     * @return a CompletableFuture containing the loaded realm world
+     */
+    CompletableFuture<ActiveRealmSnapshot> withLoadedRealm();
 }

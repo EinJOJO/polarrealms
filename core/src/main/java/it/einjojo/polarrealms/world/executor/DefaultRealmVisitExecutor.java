@@ -35,7 +35,7 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
 
     @Override
     public CompletableFuture<Void> visit(RealmWorld realmWorld, OnlinePlayerHandle visitor) {
-        return withLoadedRealm().thenCompose((activeRealm) -> {
+        return loader.withLoadedRealm().thenCompose((activeRealm) -> {
             if (api.getHostInformation().isEmpty()) { // Not a host system => a player always needs to be teleported.
                 return announceAndConnectVisitorToHostSystem(activeRealm, visitor);
             } else if (activeRealm.getHostServerName().equals(api.getHostInformation().get().getInternalName())) { // realm is hosted on this system
@@ -51,14 +51,7 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
         });
     }
 
-    /**
-     * Loads the realm asynchronously or returns an existing loaded realm.
-     *
-     * @return a CompletableFuture containing the loaded realm world
-     */
-    protected CompletableFuture<ActiveRealmSnapshot> withLoadedRealm() {
-        return CompletableFuture.completedFuture(null);
-    }
+
 
     protected CompletableFuture<Void> announceAndConnectVisitorToHostSystem(ActiveRealmSnapshot activeRealm, OnlinePlayerHandle visitor) {
 
