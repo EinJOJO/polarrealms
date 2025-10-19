@@ -1,5 +1,6 @@
 package it.einjojo.polarrealms.command.parser;
 
+import it.einjojo.polarrealms.exception.ComponentException;
 import it.einjojo.polarrealms.repository.TemplateRepository;
 import it.einjojo.polarrealms.template.Template;
 import org.incendo.cloud.context.CommandContext;
@@ -28,15 +29,21 @@ public class TemplateParser implements ArgumentParser.FutureArgumentParser<Sourc
 
     @Override
     public CompletableFuture<ArgumentParseResult<Template>> parseFuture(CommandContext<Source> commandContext, CommandInput commandInput) {
+        final String templateName = commandInput.readString();
         return CompletableFuture.supplyAsync(() -> {
-
+            Template template = templateRepository.loadByName(templateName).orElse(null);
+            if (template == null) {
+                return ArgumentParseResult.failure(ComponentException.translatable("realms.template.not-found", templateName));
+            }
+            return ArgumentParseResult.success(template);
         });
     }
 
     @Override
     public CompletableFuture<? extends Iterable<? extends Suggestion>> suggestionsFuture(CommandContext<Source> context, CommandInput input) {
-        return CompletableFuture.supplyAsync(() -> {
-
-        });
+        return CompletableFuture.supplyAsync(() -> templateRepository.loadAllNames().stream()
+                .map(Suggestion::suggestion)
+                .toList()
+        );
     }
 }

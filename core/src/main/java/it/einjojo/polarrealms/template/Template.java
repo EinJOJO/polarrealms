@@ -16,9 +16,7 @@ import java.util.function.Supplier;
 public class Template {
     private final String name;
     private @Nullable String permission;
-    @Getter(AccessLevel.PROTECTED)
     private final RealmProperties defaultProperties;
-
     private Supplier<byte[]> polarWorldByteSupplier;
 
     /**

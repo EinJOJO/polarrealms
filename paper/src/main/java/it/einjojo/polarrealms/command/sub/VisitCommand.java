@@ -1,6 +1,5 @@
 package it.einjojo.polarrealms.command.sub;
 
-import it.einjojo.polarrealms.world.RealmWorld;
 import it.einjojo.polarrealms.world.executor.RealmVisitExecutor;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -20,11 +19,6 @@ public class VisitCommand {
 
     }
 
-    @Command("realm|realms visit <realm>")
-    @CommandDescription("realms.cmd.visit.description")
-    public void visitRealmById(PlayerSource source, RealmWorld realm) {
-
-    }
 
     public RealmVisitExecutor getVisitExecutor() {
         return null; //TODO

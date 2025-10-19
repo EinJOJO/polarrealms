@@ -2,6 +2,8 @@ package it.einjojo.polarrealms.command;
 
 
 import it.einjojo.polarrealms.PaperPolarRealms;
+import it.einjojo.polarrealms.command.parser.RealmWorldParser;
+import it.einjojo.polarrealms.command.parser.TemplateParser;
 import it.einjojo.polarrealms.exception.ComponentException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -41,11 +43,18 @@ public class CommandManager {
         this.plugin = plugin;
         commandManager = PaperCommandManager.builder(PaperSimpleSenderMapper.simpleSenderMapper()).executionCoordinator(ExecutionCoordinator.coordinatorFor(ExecutionCoordinator.nonSchedulingExecutor())).buildOnEnable(plugin);
         commandManager.brigadierManager().settings().set(BrigadierSetting.FORCE_EXECUTABLE, true);
-        registerExceptionControllers(commandManager);
+        registerExceptionControllers();
+        registerParser();
         registerCommands();
     }
 
-    private void registerExceptionControllers(PaperCommandManager<Source> commandManager) {
+    private void registerParser() {
+        var parsers = commandManager.parserRegistry();
+        parsers.registerParser(TemplateParser.descriptor(plugin.getTemplateRepository()));
+        parsers.registerParser(RealmWorldParser.descriptor());
+    }
+
+    private void registerExceptionControllers() {
         commandManager.exceptionController().registerHandler(CommandExecutionException.class, ExceptionHandler.unwrappingHandler()) // Unwrap the exception and pass it to the next handler
                 .registerHandler(ArgumentParseException.class, (ExceptionContext<Source, ArgumentParseException> context) -> {
                     Throwable cause = context.exception().getCause();
