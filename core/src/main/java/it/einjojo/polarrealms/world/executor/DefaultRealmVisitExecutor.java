@@ -12,6 +12,7 @@ import it.einjojo.polarrealms.world.loader.RealmStateManager;
 import lombok.Getter;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -23,7 +24,7 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
     private final PolarRealms api;
     private final StatefulRedisConnection<String, String> redis;
     private final RealmLoader loader;
-    private final List<CompletableFuture<Void>> realmConnectionFutures;
+    private final List<CompletableFuture<Void>> realmConnectionFutures = new LinkedList<>();
 
     public DefaultRealmVisitExecutor(PolarRealms api, StatefulRedisConnection<String, String> redis, RealmLoader loader) {
         this.api = api;
@@ -50,7 +51,6 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
             }
         });
     }
-
 
 
     protected CompletableFuture<Void> announceAndConnectVisitorToHostSystem(ActiveRealmSnapshot activeRealm, OnlinePlayerHandle visitor) {
