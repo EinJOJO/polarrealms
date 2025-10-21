@@ -7,7 +7,7 @@ package it.einjojo.polarrealms.host;
 public interface RealmHost {
 
     /**
-     * @return the name of the server running the host system which also used inside velocity's server configuration.l
+     * @return the name of the server running the host system which also used inside velocity's server configuration.
      */
     String getInternalName();
 

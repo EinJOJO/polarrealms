@@ -1,7 +1,7 @@
 package it.einjojo.polarrealms.command.sub;
 
 import it.einjojo.polarrealms.template.Template;
-import it.einjojo.polarrealms.world.template.TemplateCreator;
+import it.einjojo.polarrealms.template.TemplateCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -37,7 +37,9 @@ public class TemplateCommand {
 
     @Command("realm|realms template create <arg>")
     public void templateSetupAction(PlayerSource playerSource, @Argument(suggestions = "creator") String arg) {
-        playerSource.source().sendMessage("You selected action: " + arg);
+        var setup = getSetup(playerSource.source().getUniqueId());
+        if (setup == null) return; // TODO error management
+        setup.next(arg);
     }
 
     @Command("realm|realms template edit <template>")
