@@ -1,4 +1,4 @@
-package it.einjojo.polarrealms.event;
+package it.einjojo.polarrealms.event.dispatch;
 
 
 import com.google.common.eventbus.EventBus;

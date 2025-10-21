@@ -1,19 +1,25 @@
-package it.einjojo.polarrealms.event;
+package it.einjojo.polarrealms.event.dispatch;
 
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import it.einjojo.polarrealms.event.Event;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Base64;
 import java.util.function.Consumer;
 
 /**
  * Lettuce implementation of the network event bus.
+ * Obtain an instance using {@link #create(Consumer)}.
  */
 public class LettuceNetworkEventBus extends NetworkEventBus {
     public static final String DEFAULT_CHANNEL = "pr:e";
     private final RedisClient redisClient;
     @Getter
     private final EventRegistry eventRegistry;
+    private final String channel;
+    private StatefulRedisPubSubConnection<String, String> connection;
 
 
     /**
@@ -21,9 +27,10 @@ public class LettuceNetworkEventBus extends NetworkEventBus {
      *
      * @param redisClient The connection factory. It is the caller's responsibility to shut down the client after the last event has been posted to this event bus.
      */
-    private LettuceNetworkEventBus(RedisClient redisClient, EventRegistry eventRegistry) {
+    private LettuceNetworkEventBus(RedisClient redisClient, EventRegistry eventRegistry, String channel) {
         this.redisClient = redisClient;
         this.eventRegistry = eventRegistry;
+        this.channel = channel;
     }
 
     /**
@@ -38,7 +45,7 @@ public class LettuceNetworkEventBus extends NetworkEventBus {
         if (config.getRedisClient() == null) {
             throw new IllegalArgumentException("RedisClient must not be null. Check your LettuceNetworkEventBus configuration");
         }
-        LettuceNetworkEventBus bus = new LettuceNetworkEventBus(config.getRedisClient(), config.getEventRegistry());
+        LettuceNetworkEventBus bus = new LettuceNetworkEventBus(config.getRedisClient(), config.getEventRegistry(), config.getChannel());
         bus.connect();
         return bus;
     }
@@ -46,14 +53,25 @@ public class LettuceNetworkEventBus extends NetworkEventBus {
     /**
      * Connects to the pub sub channel.
      */
-    public void connect() {
+    private void connect() {
         //TODO Connect to pub sub channel
     }
 
 
     @Override
     public void post(Object event) {
-        //TODO Post event to pub sub channel
+        if (connection == null) {
+            throw new IllegalStateException("Not connected to a pub sub channel");
+        }
+        if (!(event instanceof Event serializableEvent)) {
+            throw new IllegalArgumentException("Event must be an instance of Event");
+        }
+        Byte eventId = eventRegistry.getEventId(event.getClass());
+        if (eventId == null) {
+            throw new IllegalStateException("Event " + event.getClass().getSimpleName() + " is not registered to the underlying event registry");
+        }
+        String payload = Base64.getEncoder().encodeToString(serializableEvent.createPayload());
+        connection.async().publish(channel, eventId + ";" + payload);
     }
 
 

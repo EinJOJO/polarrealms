@@ -1,7 +1,7 @@
 package it.einjojo.polarrealms.player;
 
 import com.google.common.eventbus.Subscribe;
-import it.einjojo.polarrealms.event.LettuceNetworkEventBus;
+import it.einjojo.polarrealms.event.dispatch.LettuceNetworkEventBus;
 import it.einjojo.polarrealms.event.RealmPlayerEnterEvent;
 import lombok.Getter;
 

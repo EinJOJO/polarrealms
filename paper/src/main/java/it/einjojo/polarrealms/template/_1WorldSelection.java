@@ -53,7 +53,7 @@ class _1WorldSelection extends Stage {
                 .environment(World.Environment.NORMAL)
                 .generateStructures(false).createWorld();
         if (world == null) {
-            player.sendMessage(miniMessage().deserialize("<creator> Welt konnte nicht erstellt werden!"));
+            player.sendMessage(miniMessage.deserialize("<creator> Welt konnte nicht erstellt werden!"));
             return false;
         }
         player.teleport(world.getSpawnLocation());
@@ -63,9 +63,11 @@ class _1WorldSelection extends Stage {
 
     @Override
     public void printInstructions(Player player) {
-        miniMessage().deserialize("<creator> Welche Welt soll als Realm Template genutzt werden?");
-        miniMessage().deserialize("<creator> <cmd> [...]");
+        miniMessage.deserialize("<creator> Welche Welt soll als Realm Template genutzt werden?");
+        miniMessage.deserialize("<creator> <cmd> [...]");
     }
+
+
 
 
 }

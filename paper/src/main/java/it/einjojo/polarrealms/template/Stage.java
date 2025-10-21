@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 abstract class Stage {
 
-    private MiniMessage miniMessage = MiniMessage.miniMessage();
+    protected MiniMessage miniMessage = MiniMessage.miniMessage();
 
     /**
      * Checks if the stage is completed.

@@ -5,6 +5,6 @@ package it.einjojo.polarrealms.event;
  */
 public abstract class Event {
 
-    abstract byte[] createPayload();
+    public abstract byte[] createPayload();
 
 }

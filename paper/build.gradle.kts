@@ -33,10 +33,10 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("live.minehub:polarpaper:1.21.4.6")
 
+    paperLibrary("org.reflections:reflections:0.10.2")
     paperLibrary("com.zaxxer:HikariCP:7.0.2")
     paperLibrary("org.postgresql:postgresql:42.7.8")
     paperLibrary("org.flywaydb:flyway-database-postgresql:11.13.2")
-
     paperLibrary("org.incendo:cloud-core:2.0.0")
     paperLibrary("org.incendo:cloud-annotations:2.0.0")
     annotationProcessor("org.incendo:cloud-annotations:2.0.0")
