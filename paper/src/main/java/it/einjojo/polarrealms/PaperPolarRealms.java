@@ -3,6 +3,7 @@ package it.einjojo.polarrealms;
 import com.google.common.base.Preconditions;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariPool;
 import com.zaxxer.hikari.util.Credentials;
 import it.einjojo.polarrealms.command.CommandManager;
 import it.einjojo.polarrealms.config.RealmsGlobalConfiguration;
@@ -55,13 +56,25 @@ public class PaperPolarRealms extends JavaPlugin {
     }
 
     private void setupHikari() {
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setCredentials(Credentials.of("developer", "27IwIQMBBCauFxdrcaXmDjj94CPz"));
-        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/development");
-        hikariConfig.setDriverClassName("org.postgresql.Driver");
-        hikariConfig.setMaximumPoolSize(10);
-        hikariConfig.setSchema("polarrealms");
-        dataSource = new HikariDataSource(hikariConfig);
+        try {
+            HikariConfig hikariConfig = new HikariConfig();
+            hikariConfig.setCredentials(Credentials.of("developer", "27IwIQMBBCauFxdrcaXmDjj94CPz"));
+            hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/development");
+            hikariConfig.setDriverClassName("org.postgresql.Driver");
+            hikariConfig.setMaximumPoolSize(10);
+            hikariConfig.setSchema("polarrealms");
+            dataSource = new HikariDataSource(hikariConfig);
+            getSLF4JLogger().info("Verbindung zur Datenbank hergestellt");
+        } catch (HikariPool.PoolInitializationException ex) {
+            getSLF4JLogger().error("""
+                    Datenbank verbindung konnte nicht hergestellt werden.
+                    => {}
+                    
+                    1. Prüfe deine PostgreSQL Config
+                    2. Ist der Datenbank Server erreichbar?
+                    3. Wende dich an den Support.
+                    """, ex.getMessage());
+        }
     }
 
     private void flywayPostgres() {

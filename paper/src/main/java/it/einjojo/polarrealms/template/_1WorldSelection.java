@@ -57,7 +57,8 @@ class _1WorldSelection extends Stage {
             return false;
         }
         player.teleport(world.getSpawnLocation());
-
+        player.sendMessage(miniMessage.deserialize("<creator> Eine temporäre Welt wurde erstellt!"));
+        
         return true;
     }
 

@@ -4,15 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 
 @Getter
-@Setter
 abstract class Stage {
-
+    @Setter
     protected MiniMessage miniMessage = MiniMessage.miniMessage();
+    protected @Nullable Stage nextStage;
+    protected @Nullable Stage previousStage;
 
     /**
      * Checks if the stage is completed.
@@ -39,5 +41,18 @@ abstract class Stage {
 
     abstract void printInstructions(Player player);
 
-
+    /**
+     * Sets the next stage and updates the previous stage of the provided object, making a linear chain of stages.
+     *
+     * @param nextStage the next stage to set
+     *
+     */
+    public void setNextStage(@Nullable Stage nextStage) {
+        if (nextStage != null && nextStage.previousStage != null)
+            throw new IllegalArgumentException("Previous stage must be null!");
+        if (nextStage != null) {
+            nextStage.previousStage = this;
+        }
+        this.nextStage = nextStage;
+    }
 }

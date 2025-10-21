@@ -1,6 +1,5 @@
 package it.einjojo.polarrealms.command.sub;
 
-import it.einjojo.polarrealms.template.Template;
 import it.einjojo.polarrealms.template.TemplateCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.incendo.cloud.annotations.Argument;
@@ -26,33 +25,30 @@ public class TemplateCommand {
     }
 
 
-    @Command("realm|realms template create")
+    @Command("realm setup")
     public void startTemplateSetup(PlayerSource playerSource) {
-        if (getSetup(playerSource.source().getUniqueId()) != null) {
-            playerSource.source().sendMessage("You are already setting up a template!");
+        var setup = getSetup(playerSource.source().getUniqueId());
+        if (setup != null) {
+            setup.next(null);
             return;
         }
         templateSetups.add(new TemplateCreator(playerSource.source()));
     }
 
-    @Command("realm|realms template create <arg>")
-    public void templateSetupAction(PlayerSource playerSource, @Argument(suggestions = "creator") String arg) {
+    @Command("realm setup <arg>")
+    public void templateSetupAction(PlayerSource playerSource, @Argument(value = "arg", suggestions = "creator") String arg) {
         var setup = getSetup(playerSource.source().getUniqueId());
         if (setup == null) return; // TODO error management
         setup.next(arg);
     }
 
-    @Command("realm|realms template edit <template>")
-    public void templateEdit(PlayerSource playerSource, Template template) {
-
-    }
 
     @Suggestions("creator")
     public List<String> templateSetupSuggestions(CommandContext<Source> context, CommandInput input) {
-        if (!(context.sender() instanceof PlayerSource ps)) return List.of("invalid-sender");
+        if (!(context.sender() instanceof PlayerSource ps)) return List.of();
         TemplateCreator creator = getSetup(ps.source().getUniqueId());
         if (creator != null) return creator.getSuggestion();
-        return List.of("fallback");
+        return List.of();
     }
 
     public @Nullable TemplateCreator getSetup(UUID playerId) {
