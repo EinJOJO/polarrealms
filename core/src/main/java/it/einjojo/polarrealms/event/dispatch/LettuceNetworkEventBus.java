@@ -5,6 +5,7 @@ import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import it.einjojo.polarrealms.event.Event;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Base64;
 import java.util.function.Consumer;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
  * Lettuce implementation of the network event bus.
  * Obtain an instance using {@link #create(Consumer)}.
  */
+@Slf4j
 public class LettuceNetworkEventBus extends NetworkEventBus {
     public static final String DEFAULT_CHANNEL = "pr:e";
     private final RedisClient redisClient;
@@ -54,7 +56,12 @@ public class LettuceNetworkEventBus extends NetworkEventBus {
      * Connects to the pub sub channel.
      */
     private void connect() {
-        //TODO Connect to pub sub channel
+        if (connection != null) {
+            throw new IllegalStateException("Already connected to a pub sub channel");
+        }
+        this.connection = redisClient.connectPubSub();
+        connection.sync().subscribe(channel);
+        log.info("Connected to pub sub channel {}", channel);
     }
 
 
@@ -72,6 +79,7 @@ public class LettuceNetworkEventBus extends NetworkEventBus {
         }
         String payload = Base64.getEncoder().encodeToString(serializableEvent.createPayload());
         connection.async().publish(channel, eventId + ";" + payload);
+        log.debug("Posted event {} to pub sub channel {}", event.getClass().getSimpleName(), channel);
     }
 
 

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 
 public class TemplateCreator {
-    private static final Component PREFIX = MiniMessage.miniMessage().deserialize("<#f9a8d4><b>ᴄʀᴇᴀᴛᴏʀ</b></#f9a8d4><#dbeafe>");
+    private static final Component PREFIX = MiniMessage.miniMessage().deserialize("<#f9a8d4><b>ᴄʀᴇᴀᴛᴏʀ</b></#f9a8d4><#a5b4fc>");
     protected final MiniMessage miniMessage = MiniMessage.builder()
             .editTags(builder -> {
                 builder.tag("creator", Tag.inserting(PREFIX));

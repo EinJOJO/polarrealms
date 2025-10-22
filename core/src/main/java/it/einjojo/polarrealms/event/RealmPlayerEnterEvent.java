@@ -14,6 +14,7 @@ public class RealmPlayerEnterEvent extends Event {
     private final UUID playerId;
     private final UUID realmId;
 
+
     public static RealmPlayerEnterEvent deserialize(byte[] bytes) {
         var in = ByteStreams.newDataInput(bytes);
         return new RealmPlayerEnterEvent(
