@@ -7,6 +7,9 @@ import lombok.Getter;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @see PlayerService
+ */
 @Getter
 public class RealmPlayer {
     private final UUID uuid;

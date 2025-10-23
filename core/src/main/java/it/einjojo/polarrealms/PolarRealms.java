@@ -14,8 +14,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface PolarRealms {
 
-    CompletableFuture<Optional<RealmPlayer>> getPlayer(UUID playerId);
-
     RealmVisitExecutor getVisitExecutor();
 
     OnlinePlayerHandleFactory getOnlinePlayerHandleFactory();

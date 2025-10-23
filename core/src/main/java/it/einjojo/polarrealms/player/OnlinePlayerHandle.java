@@ -28,7 +28,7 @@ public interface OnlinePlayerHandle {
     /**
      * Get Server Name of player
      *
-     * @return server name if connected to a server, empty otherwise
+     * @return velocity server name if connected to a server, empty otherwise
      */
     CompletableFuture<@Nullable String> getServerName();
 

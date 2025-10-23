@@ -16,15 +16,17 @@ import org.flywaydb.core.Flyway;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class PaperPolarRealms extends JavaPlugin {
+public class PolarRealmsPlugin extends JavaPlugin {
     private MiniMessage miniMessage = MiniMessage.miniMessage();
     private RealmsGlobalConfiguration config;
     @Getter
     private TemplateRepository templateRepository;
 
     @Getter
-    private static PaperPolarRealms instance;
+    private static PolarRealmsPlugin instance;
 
+    @Getter
+    private PolarRealms api;
     private HikariDataSource dataSource;
 
     @Override

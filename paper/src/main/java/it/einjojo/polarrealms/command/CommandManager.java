@@ -1,7 +1,7 @@
 package it.einjojo.polarrealms.command;
 
 
-import it.einjojo.polarrealms.PaperPolarRealms;
+import it.einjojo.polarrealms.PolarRealmsPlugin;
 import it.einjojo.polarrealms.command.parser.RealmWorldParser;
 import it.einjojo.polarrealms.command.parser.TemplateParser;
 import it.einjojo.polarrealms.exception.ComponentException;
@@ -31,7 +31,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public class CommandManager {
-    private final PaperPolarRealms plugin;
+    private final PolarRealmsPlugin plugin;
     private final PaperCommandManager<Source> commandManager;
 
     /**
@@ -39,7 +39,7 @@ public class CommandManager {
      *
      * @param plugin the plugin instance
      */
-    public CommandManager(PaperPolarRealms plugin) {
+    public CommandManager(PolarRealmsPlugin plugin) {
         this.plugin = plugin;
         commandManager = PaperCommandManager.builder(PaperSimpleSenderMapper.simpleSenderMapper()).executionCoordinator(ExecutionCoordinator.coordinatorFor(ExecutionCoordinator.nonSchedulingExecutor())).buildOnEnable(plugin);
         commandManager.brigadierManager().settings().set(BrigadierSetting.FORCE_EXECUTABLE, true);

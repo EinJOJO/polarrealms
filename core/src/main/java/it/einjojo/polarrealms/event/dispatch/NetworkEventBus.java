@@ -43,4 +43,9 @@ public abstract class NetworkEventBus {
     public EventBus getInternalEventBus() {
         return eventBus;
     }
+
+    /**
+     * Might have logic
+     */
+    public abstract void close();
 }

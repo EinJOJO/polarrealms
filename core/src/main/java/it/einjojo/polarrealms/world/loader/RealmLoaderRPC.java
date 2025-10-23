@@ -4,6 +4,7 @@ import it.einjojo.polarrealms.PolarRealms;
 import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import it.einjojo.polarrealms.world.CreationContext;
 import it.einjojo.polarrealms.world.RealmWorld;
+import lombok.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -30,9 +31,7 @@ public class RealmLoaderRPC implements RealmLoader {
     }
 
     @Override
-    public CompletableFuture<ActiveRealmSnapshot> withLoadedRealm() {
+    public CompletableFuture<@NonNull ActiveRealmSnapshot> withLoadedRealm(@NonNull RealmWorld realmWorld) {
         return null;
     }
-
-
 }

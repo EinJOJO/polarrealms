@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * Has direct access to template files.
+ *
  */
 public interface WorldFileStorage {
 

@@ -8,7 +8,9 @@ import org.jspecify.annotations.NullMarked;
 import java.util.UUID;
 
 /**
+ * Trusted Player belongs to a realm world.
  *
+ * @see RealmWorld#getTrustedPlayers()
  */
 @Getter
 @NullMarked
