@@ -3,7 +3,15 @@
 </p>
 <h1 align="center">Polar Realms - WIP 🏝️</h1>
 
+```
+Done:
+Host-Loader, API-Strucutre, Networkwide Event System, Polar integration, SSH-File-Storage, 
+Players, Properties, Project strucutre.
+ 
+Progress: [##### ##... ..... .....] 35%
 
+- Database, RPC-Loader, State Management, World Data, Templates, Upgrades...
+```
 
 Polar Realms is a work-in-progress world management plugin for Paper Minecraft servers. While initially designed for use
 on wandoria.net, this plugin is built to be highly extendable and adaptable to other server environments. Its primary
@@ -49,3 +57,10 @@ features.
 
 The official documentation for this project is being developed using _Writerside_.
 It is not hosted yet and has not been written yet.
+
+---
+
+# Ideas
+
+- [ ] LuckPerms Context Support
+- [ ] Placeholder API Support
