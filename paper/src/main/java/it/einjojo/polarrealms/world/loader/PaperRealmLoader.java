@@ -55,14 +55,14 @@ public class PaperRealmLoader implements RealmLoader {
         RealmWorld newRealm = new RealmWorld(
                 context.getRealmId(),
                 context.getOwner(),
-                "__random_dict__",
+                context.isRandomName() ?
+                        context.getRealmName() + "TODO" :
+                        context.getRealmName(),
                 -1,
                 System.currentTimeMillis(),
                 properties,
                 api);
-        newRealm.setName(context.isRandomName() ?
-                context.getRealmName() + "TODO" :
-                context.getRealmName());
+
         realmRepository.saveRealm(newRealm);
         api.getLogger().info("Realm persisted in database.");
         try {
@@ -88,7 +88,7 @@ public class PaperRealmLoader implements RealmLoader {
         PolarWorld polarWorld = PolarReader.read(polarWorldBytes);
         Polar.loadWorld(polarWorld, realmWorld.getRealmId().toString(), polarConfigFactory.createConfig(realmWorld));
         api.getLogger().info("3/4 Loaded by Polar.");
-        RealmHandle handle = new RealmHandle(realmWorld, polarWorld, this);
+        RealmHandle handle = new RealmHandle(realmWorld, polarWorld, this, host.getInternalName());
         loadedRealms.add(handle);
         api.getLogger().info("4/4 Created Handle instance. Realm loaded successfully. ({} realms loaded.)", loadedRealms.size());
         return handle;

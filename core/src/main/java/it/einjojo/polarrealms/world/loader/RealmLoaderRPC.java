@@ -3,6 +3,7 @@ package it.einjojo.polarrealms.world.loader;
 import it.einjojo.polarrealms.PolarRealms;
 import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import it.einjojo.polarrealms.world.CreationContext;
+import it.einjojo.polarrealms.world.RealmStateManager;
 import it.einjojo.polarrealms.world.RealmWorld;
 import lombok.NonNull;
 

@@ -33,11 +33,11 @@ public interface OnlinePlayerHandle {
     CompletableFuture<@Nullable String> getServerName();
 
     /**
-     *
      * Thread safe method to teleport the player to a location.
      *
      * @param location the location to teleport the player to.
      * @throws UnsupportedOperationException if the player cannot be teleported (e.g. on velocity servers)
+     * @throws java.util.NoSuchElementException if the world (realmId) is not found on this instance.
      */
     void teleport(Location location) throws UnsupportedOperationException;
 

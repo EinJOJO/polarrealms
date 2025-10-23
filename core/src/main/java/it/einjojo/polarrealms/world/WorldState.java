@@ -29,6 +29,13 @@ public enum WorldState {
     /**
      * The world is being unloaded.
      */
-    UNLOADING,
+    UNLOADING;
+
+    public static WorldState fromOrdinal(int ordinal) {
+        if (ordinal < 0 || ordinal >= WorldState.values().length) {
+            throw new IllegalArgumentException("Invalid ordinal: " + ordinal);
+        }
+        return WorldState.values()[ordinal];
+    }
 
 }

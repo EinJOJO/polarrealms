@@ -1,10 +1,9 @@
-package it.einjojo.polarrealms.world.loader;
+package it.einjojo.polarrealms.world;
 
 import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
 import it.einjojo.polarrealms.exception.LockViolationException;
 import it.einjojo.polarrealms.host.RealmHost;
-import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,11 +11,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Manages loaded realms using Redis
+ * Manages loaded realms using Redis and their locks.
  */
 public class RealmStateManager {
     private static final int LOCK_TTL = 604800; // 7 days
     private static final String LOCKS = "pr:locks:";
+    public static final String REALMS_HASH_MAP = "pr:realms:";
+    public static final String REALM_STATE_FIELD = "state";
     private final StatefulRedisConnection<String, String> redis;
 
     public RealmStateManager(StatefulRedisConnection<String, String> redis) {
@@ -24,10 +25,11 @@ public class RealmStateManager {
     }
 
     /**
-     * Only called by PaperRealmLoader
+     * Only called by the PaperRealmLoader
+     * Updates the state in redis and dispatches a {@link it.einjojo.polarrealms.event.RealmStateChangeEvent}
      */
-    protected void setState() {
-
+    protected void setState(ActiveRealmSnapshot snapshot, WorldState newState) {
+        redis.sync().hset(REALMS_HASH_MAP + snapshot.getRealmId().toString(), REALM_STATE_FIELD, String.valueOf(newState.ordinal()));
     }
 
     /**
@@ -63,8 +65,19 @@ public class RealmStateManager {
     }
 
     public Optional<ActiveRealmSnapshot> getActiveRealmSnapshot(UUID realmId) {
-        return Optional.empty();
+        return Optional.empty(); //TODO implement the logic
     }
+
+    /**
+     * Reads the state from redis
+     *
+     * @param uuid realm's UUID
+     * @return the realm's state
+     */
+    public WorldState getRealmState(UUID uuid) {
+        return WorldState.fromOrdinal(Integer.parseInt(redis.sync().hget(REALMS_HASH_MAP + uuid.toString(), REALM_STATE_FIELD)));
+    }
+
 
     public Logger getLogger() {
         return LoggerFactory.getLogger(getClass());

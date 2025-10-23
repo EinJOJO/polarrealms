@@ -7,19 +7,22 @@ import it.einjojo.polarrealms.event.dispatch.LettuceNetworkEventBus;
 import it.einjojo.polarrealms.event.dispatch.NetworkEventBus;
 import it.einjojo.polarrealms.host.RealmHost;
 import it.einjojo.polarrealms.player.OnlinePlayerHandleFactory;
-import it.einjojo.polarrealms.player.PlayerService;
+import it.einjojo.polarrealms.player.RealmPlayer;
+import it.einjojo.polarrealms.player.provider.NameProvider;
 import it.einjojo.polarrealms.util.ShutdownHook;
 import it.einjojo.polarrealms.world.executor.DefaultRealmVisitExecutor;
 import it.einjojo.polarrealms.world.executor.RealmVisitExecutor;
 import it.einjojo.polarrealms.world.loader.RealmLoader;
-import it.einjojo.polarrealms.world.loader.RealmStateManager;
+import it.einjojo.polarrealms.world.RealmStateManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Use this class if you want to create an instance of {@link PolarRealms} on your platform implementation.
@@ -40,8 +43,8 @@ public class PolarRealmsClient implements PolarRealms {
     private final RealmStateManager realmStateManager;
     private final OnlinePlayerHandleFactory onlinePlayerHandleFactory;
     private RealmVisitExecutor visitExecutor;
-    private PlayerService playerService;
     private NetworkEventBus eventBus;
+    private NameProvider nameProvider = null;
 
     /**
      * <i>Can only be set by the paper module</i>
@@ -52,7 +55,7 @@ public class PolarRealmsClient implements PolarRealms {
 
     /**
      * Creates a new instance of {@link PolarRealmsClient}.
-     * <p>Constructs default instances of {@link RealmStateManager}, {@link RealmVisitExecutor}, {@link PlayerService}
+     * <p>Constructs default instances of {@link RealmStateManager}, {@link RealmVisitExecutor},
      * and uses {@link LettuceNetworkEventBus} for the event bus.</p>
      *
      * @param redis                     used for creating a redis connection.
@@ -71,7 +74,6 @@ public class PolarRealmsClient implements PolarRealms {
         StatefulRedisConnection<String, String> connection = redis.connect();
         this.realmStateManager = new RealmStateManager(connection);
         this.visitExecutor = new DefaultRealmVisitExecutor(this, connection, loader);
-        this.playerService = new PlayerService();
         this.eventBus = createNetworkEventBus();
     }
 
@@ -111,7 +113,16 @@ public class PolarRealmsClient implements PolarRealms {
         );
     }
 
-    public Optional<RealmHost> getHostInformation() {
+    public @NotNull Optional<RealmHost> getHostInformation() {
         return Optional.ofNullable(hostInformation);
+    }
+
+
+    @Override
+    public @NotNull Optional<RealmPlayer> getPlayer(@NotNull UUID uuid) {
+        if (getNameProvider().getUsername(uuid) == null) {
+            return Optional.empty();
+        }
+        return Optional.of(new RealmPlayer(uuid, this));
     }
 }

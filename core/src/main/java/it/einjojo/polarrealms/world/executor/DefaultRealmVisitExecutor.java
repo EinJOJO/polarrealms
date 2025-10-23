@@ -8,7 +8,7 @@ import it.einjojo.polarrealms.player.PlayerConnectToRealmCallback;
 import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import it.einjojo.polarrealms.world.RealmWorld;
 import it.einjojo.polarrealms.world.loader.RealmLoader;
-import it.einjojo.polarrealms.world.loader.RealmStateManager;
+import it.einjojo.polarrealms.world.RealmStateManager;
 import lombok.Getter;
 import org.jspecify.annotations.NullMarked;
 

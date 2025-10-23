@@ -4,7 +4,9 @@ package it.einjojo.polarrealms.player;
 import java.util.UUID;
 
 /**
- * Creates a new {@link OnlinePlayerHandle} instance.
+ * Factory interface for {@link OnlinePlayerHandle}.
+ * <p>Depending on the environment, an OnlinePlayerHandle might be optimized for CloudNet or any other special environment</p>
+ * <p>Implemented by the platform where polar realms will be used.</p>
  */
 public interface OnlinePlayerHandleFactory {
 

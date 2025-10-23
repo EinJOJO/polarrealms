@@ -1,9 +1,11 @@
 package it.einjojo.polarrealms.command.sub;
 
-import it.einjojo.polarrealms.player.OnlinePlayerHandleFactory;
+import it.einjojo.polarrealms.PolarRealms;
+import it.einjojo.polarrealms.PolarRealmsPlugin;
+import it.einjojo.polarrealms.exception.ComponentException;
+import it.einjojo.polarrealms.player.RealmPlayer;
 import it.einjojo.polarrealms.template.Template;
 import it.einjojo.polarrealms.world.CreationContext;
-import it.einjojo.polarrealms.world.loader.RealmLoader;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.CommandDescription;
 import org.incendo.cloud.annotations.Flag;
@@ -16,30 +18,27 @@ import java.util.concurrent.CompletableFuture;
 @CommandContainer
 @NullMarked
 public class CreateCommand {
+    private final PolarRealms api;
 
     public CreateCommand() {
+        this.api = PolarRealmsPlugin.getInstance().getApi();
     }
 
     @Command("realm|realms create")
     @CommandDescription("realms.cmd.create.description")
     public CompletableFuture<Void> createRealm(PlayerSource source, @Flag("template") Template template) {
-        //TODO max. realms reached check
-        return getLoader().createRealm(CreationContext.builder()
+        RealmPlayer rp = api.getPlayer(source.source().getUniqueId()).orElseThrow(() -> ComponentException.translatable("realm.generic-error"));
+        if (rp.hasReachedRealmLimit()) {
+            return CompletableFuture.failedFuture(ComponentException.translatable("realm.create.limit-reached"));
+        }
+        return api.getLoader().createRealm(CreationContext.builder()
                         .owner(source.source().getUniqueId())
                         .template(template)
                         .build())
                 .thenAccept(realm -> {
-                    realm.visit(getHandleFactory().createHandle(source.source()));
+                    realm.visit(api.getOnlinePlayerHandleFactory().createHandle(source.source()));
                 });
     }
 
-
-    public RealmLoader getLoader() {
-        return null; // TODO
-    }
-
-    public OnlinePlayerHandleFactory getHandleFactory() {
-        return null; // TODO
-    }
 
 }
