@@ -27,6 +27,15 @@ public class RealmWorld {
     private final RealmProperties properties;
     private final PolarRealms api;
 
+    public RealmWorld(UUID realmId, UUID ownerId, String name, long lastLoaded, long createdAt, RealmProperties properties, PolarRealms api) {
+        this.realmId = realmId;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.lastLoaded = lastLoaded;
+        this.createdAt = createdAt;
+        this.properties = properties;
+        this.api = api;
+    }
 
     /**
      * Visits the realm.

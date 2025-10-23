@@ -48,10 +48,10 @@ dependencies {
 
 paper {
     name = "PolarRealms"
-    main = "it.einjojo.polarrealms.PaperPolarRealms"
+    main = "it.einjojo.polarrealms.PolarRealmsPlugin"
     foliaSupported = false
     authors = listOf("EinJOJO")
-    description = "Provides the economy- and basic commands, scoreboard, position management, etc."
+    description = "Realm System"
     website = "https://einjojo.it"
     apiVersion = "1.20"
     loader = "it.einjojo.polarrealms.PluginLibrariesLoader"
@@ -69,8 +69,8 @@ paper {
 }
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-
     withSourcesJar()
+
 }
 
 tasks {
@@ -91,7 +91,7 @@ tasks {
         relocate("io.lettuce", "net.wandoria.essentials.libs.lettuce")
         //relocate("org.incendo.cloud", "net.wandoria.essentials.libs.cloud")
         relocate("io.netty", "net.wandoria.essentials.libs.netty")
-        //relocate("org.flywaydb", "net.wandoria.essentials.libs.flywaydb")
+
     }
 }
 tasks.test {

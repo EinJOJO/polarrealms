@@ -19,6 +19,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.slf4j.Logger;
 
+import java.util.Optional;
+
 /**
  * Use this class if you want to create an instance of {@link PolarRealms} on your platform implementation.
  * <p>All Setters are safe to use during runtime to modify the behavior of the realm system.</p>
@@ -42,7 +44,6 @@ public class PolarRealmsClient implements PolarRealms {
     private NetworkEventBus eventBus;
 
     /**
-     * <p>If not null, this client belongs to a host system.</p>
      * <i>Can only be set by the paper module</i>
      */
     @Setter(AccessLevel.PACKAGE)
@@ -71,10 +72,7 @@ public class PolarRealmsClient implements PolarRealms {
         this.realmStateManager = new RealmStateManager(connection);
         this.visitExecutor = new DefaultRealmVisitExecutor(this, connection, loader);
         this.playerService = new PlayerService();
-        this.eventBus = LettuceNetworkEventBus.create((builder) -> builder
-                .redisClient(redis)
-                .eventRegistry(eventRegistry)
-        );
+        this.eventBus = createNetworkEventBus();
     }
 
     /**
@@ -101,5 +99,19 @@ public class PolarRealmsClient implements PolarRealms {
         eventBus.close();
     }
 
+    /**
+     * Overwrite this method to use custom implementation of {@link NetworkEventBus}.
+     *
+     * @return an instance of {@link NetworkEventBus}
+     */
+    protected NetworkEventBus createNetworkEventBus() {
+        return LettuceNetworkEventBus.create((builder) -> builder
+                .redisClient(redis)
+                .eventRegistry(eventRegistry)
+        );
+    }
 
+    public Optional<RealmHost> getHostInformation() {
+        return Optional.ofNullable(hostInformation);
+    }
 }

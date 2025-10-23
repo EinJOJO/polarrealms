@@ -1,39 +1,48 @@
 
 package it.einjojo.polarrealms.command.parser;
 
-import it.einjojo.polarrealms.exception.ComponentException;
+import com.google.gson.Gson;
+import it.einjojo.polarrealms.PolarRealmsPlugin;
+import it.einjojo.polarrealms.world.RealmProperties;
 import it.einjojo.polarrealms.world.RealmWorld;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.incendo.cloud.context.CommandContext;
-import org.incendo.cloud.context.CommandInput;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.paper.util.sender.Source;
 import org.incendo.cloud.parser.ArgumentParseResult;
-import org.incendo.cloud.parser.ArgumentParser;
 import org.incendo.cloud.parser.ParserDescriptor;
-import org.incendo.cloud.suggestion.BlockingSuggestionProvider;
+import org.incendo.cloud.parser.aggregate.AggregateParser;
+import org.incendo.cloud.parser.standard.StringParser;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.UUID;
 
+/**
+ * A realm-world argument is expected to be two elements.
+ * <p>First the realm owner, second optionally the realm name.</p>
+ */
 @NullMarked
-public class RealmWorldParser implements ArgumentParser.FutureArgumentParser<Source, RealmWorld>, BlockingSuggestionProvider.Strings<Source> {
+public class RealmWorldParser {
 
 
     public static ParserDescriptor<Source, RealmWorld> descriptor() {
-        return ParserDescriptor.of(new RealmWorldParser(), RealmWorld.class);
+        AggregateParser<Source, RealmWorld> parser = AggregateParser.<Source>builder()
+                .withComponent("owner", PlayerParser.playerParser())
+                .withComponent("alias", StringParser.quotedStringParser())
+                .withMapper(RealmWorld.class, (commandContext, context) -> {
+                    Player player = context.get("owner");
+                    String alias = context.getOrDefault("alias", "default");
+                    return ArgumentParseResult.successFuture(
+                            new RealmWorld(UUID.randomUUID(),
+                                    player.getUniqueId(),
+                                    alias,
+                                    System.currentTimeMillis(),
+                                    System.currentTimeMillis(),
+                                    new RealmProperties(new Gson()),
+                                    PolarRealmsPlugin.getInstance().getApi())
+                    );
+                }).build();
+        return ParserDescriptor.of(parser, RealmWorld.class);
     }
 
-    @Override
-    public CompletableFuture<ArgumentParseResult<RealmWorld>> parseFuture(CommandContext<Source> commandContext, CommandInput commandInput) {
-        final String templateName = commandInput.readString();
-        return CompletableFuture.supplyAsync(() -> {
-            return ArgumentParseResult.failure(ComponentException.translatable("realms.command.parser.realmworld.not-implemented")); //TODO
-        });
-    }
 
-    @Override
-    public @NonNull Iterable<@NonNull String> stringSuggestions(@NonNull CommandContext<Source> commandContext, @NonNull CommandInput input) {
-        return List.of("realm1"); //TODO
-    }
 }

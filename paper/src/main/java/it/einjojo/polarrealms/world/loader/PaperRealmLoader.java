@@ -52,7 +52,14 @@ public class PaperRealmLoader implements RealmLoader {
         api.getLogger().info("Persisting realm... {}", context);
         Template realmTemplate = context.getTemplate();
         RealmProperties properties = realmTemplate.createProperties(context);
-        RealmWorld newRealm = new RealmWorld(context.getRealmId(), context.getOwner(), properties, api);
+        RealmWorld newRealm = new RealmWorld(
+                context.getRealmId(),
+                context.getOwner(),
+                "__random_dict__",
+                -1,
+                System.currentTimeMillis(),
+                properties,
+                api);
         newRealm.setName(context.isRandomName() ?
                 context.getRealmName() + "TODO" :
                 context.getRealmName());

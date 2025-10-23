@@ -1,8 +1,8 @@
 package it.einjojo.polarrealms.player;
 
 import com.google.common.eventbus.Subscribe;
-import it.einjojo.polarrealms.event.dispatch.LettuceNetworkEventBus;
 import it.einjojo.polarrealms.event.RealmPlayerEnterEvent;
+import it.einjojo.polarrealms.event.dispatch.NetworkEventBus;
 import lombok.Getter;
 
 import java.util.UUID;
@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
 public class PlayerConnectToRealmCallback {
     private final UUID uuid;
     private final CompletableFuture<UUID> future;
-    private final LettuceNetworkEventBus eventBus;
+    private final NetworkEventBus eventBus;
 
 
-    public PlayerConnectToRealmCallback(UUID uuid, LettuceNetworkEventBus eventBus, int timeoutSeconds) {
+    public PlayerConnectToRealmCallback(UUID uuid, NetworkEventBus eventBus, int timeoutSeconds) {
         this.uuid = uuid;
         this.eventBus = eventBus;
         eventBus.register(this);

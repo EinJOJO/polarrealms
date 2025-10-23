@@ -44,7 +44,10 @@ public class PolarRealmsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        setupHikari();
+        if (!setupHikari()) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         flywayPostgres();
         new CommandManager(this);
     }
@@ -57,7 +60,7 @@ public class PolarRealmsPlugin extends JavaPlugin {
         }
     }
 
-    private void setupHikari() {
+    private boolean setupHikari() {
         try {
             HikariConfig hikariConfig = new HikariConfig();
             hikariConfig.setCredentials(Credentials.of("developer", "27IwIQMBBCauFxdrcaXmDjj94CPz"));
@@ -67,6 +70,7 @@ public class PolarRealmsPlugin extends JavaPlugin {
             hikariConfig.setSchema("polarrealms");
             dataSource = new HikariDataSource(hikariConfig);
             getSLF4JLogger().info("Verbindung zur Datenbank hergestellt");
+            return true;
         } catch (HikariPool.PoolInitializationException ex) {
             getSLF4JLogger().error("""
                     Datenbank verbindung konnte nicht hergestellt werden.
@@ -76,6 +80,7 @@ public class PolarRealmsPlugin extends JavaPlugin {
                     2. Ist der Datenbank Server erreichbar?
                     3. Wende dich an den Support.
                     """, ex.getMessage());
+            return false;
         }
     }
 
