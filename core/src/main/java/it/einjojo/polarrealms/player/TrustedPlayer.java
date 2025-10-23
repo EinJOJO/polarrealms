@@ -3,6 +3,7 @@ package it.einjojo.polarrealms.player;
 import it.einjojo.polarrealms.player.provider.NameProvider;
 import it.einjojo.polarrealms.world.RealmWorld;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.UUID;
@@ -25,8 +26,13 @@ public class TrustedPlayer {
         this.nameProvider = nameProvider;
     }
 
+
     public String getName() {
         return nameProvider.getUsername(uuid);
+    }
+
+    public Component getDisplayName() {
+        return nameProvider.getDisplayName(uuid);
     }
 
     public boolean isTrusted() {
