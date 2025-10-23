@@ -17,6 +17,7 @@ Polar Realms is a work-in-progress world management plugin for Paper Minecraft s
 on wandoria.net, this plugin is built to be highly extendable and adaptable to other server environments. Its primary
 goal is to provide a robust system for managing world data and properties across multiple servers.
 
+![Highlights](./Writerside/images/highlights.svg)
 ## 🛠️ Features
 
 This plugin aims to provide a comprehensive set of features for managing world data. The core functionality is being
