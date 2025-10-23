@@ -1,3 +1,4 @@
+
 CREATE TABLE polarrealms_templates
 (
     name               VARCHAR(64)  NOT NULL,

@@ -40,7 +40,7 @@ public class DefaultRealmVisitExecutor implements RealmVisitExecutor {
 
     @Override
     public CompletableFuture<Void> visit(RealmWorld realmWorld, OnlinePlayerHandle visitor) {
-        return loader.withLoadedRealm().thenCompose((activeRealm) -> {
+        return loader.withLoadedRealm(realmWorld).thenCompose((activeRealm) -> {
             if (api.getHostInformation().isEmpty()) { // Executor is not running on a host system => a player is always on the wrong server.
                 return announceAndConnectVisitorToHostSystem(activeRealm, visitor);
             } else if (activeRealm.getHostServerName().equals(api.getHostInformation().get().getInternalName())) { // check realm is hosted on this system

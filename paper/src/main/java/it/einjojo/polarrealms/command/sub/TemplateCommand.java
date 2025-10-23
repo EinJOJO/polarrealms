@@ -25,20 +25,13 @@ public class TemplateCommand {
     }
 
 
-    @Command("realm setup")
-    public void startTemplateSetup(PlayerSource playerSource) {
+    @Command("realm setup [arg]")
+    public void templateSetupAction(PlayerSource playerSource, @Nullable @Argument(value = "arg", suggestions = "creator") String arg) {
         var setup = getSetup(playerSource.source().getUniqueId());
-        if (setup != null) {
-            setup.next(null);
-            return;
+        if (setup == null) {
+            setup = new TemplateCreator(playerSource.source());
+            templateSetups.add(setup);
         }
-        templateSetups.add(new TemplateCreator(playerSource.source()));
-    }
-
-    @Command("realm setup <arg>")
-    public void templateSetupAction(PlayerSource playerSource, @Argument(value = "arg", suggestions = "creator") String arg) {
-        var setup = getSetup(playerSource.source().getUniqueId());
-        if (setup == null) return; // TODO error management
         setup.next(arg);
     }
 

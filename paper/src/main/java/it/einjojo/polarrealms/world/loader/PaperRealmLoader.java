@@ -88,7 +88,7 @@ public class PaperRealmLoader implements RealmLoader {
     }
 
     @Override
-    public CompletableFuture<ActiveRealmSnapshot> withLoadedRealm() {
+    public CompletableFuture<ActiveRealmSnapshot> withLoadedRealm(RealmWorld realmWorld) {
         return null; //TODO Create instances of active snapshots
     }
 

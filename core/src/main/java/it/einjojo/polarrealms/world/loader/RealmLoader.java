@@ -3,6 +3,7 @@ package it.einjojo.polarrealms.world.loader;
 import it.einjojo.polarrealms.world.ActiveRealmSnapshot;
 import it.einjojo.polarrealms.world.CreationContext;
 import it.einjojo.polarrealms.world.RealmWorld;
+import lombok.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,9 +27,11 @@ public interface RealmLoader {
     RealmStateManager getStateManager();
 
     /**
-     * Loads the realm asynchronously or returns an existing loaded realm.
+     * Get an active realm and load the realm, if not loaded
+     * <p>Preferred usage when an action is dedicated to a loaded realm, like visiting, because the future will always return a loaded realm if possible</p>
      *
+     * @param realmWorld the realm world to load
      * @return a CompletableFuture containing the loaded realm world
      */
-    CompletableFuture<ActiveRealmSnapshot> withLoadedRealm();
+    CompletableFuture<ActiveRealmSnapshot> withLoadedRealm(@NonNull RealmWorld realmWorld);
 }
